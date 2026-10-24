@@ -1,0 +1,26 @@
+services:
+  - type: worker
+    name: momentum-paper-bot
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    disk:
+      name: momentum-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: MODE
+        value: paper
+      - key: DATA_DIR
+        value: /data
+      - key: UNIVERSE_SIZE
+        value: "50"
+      - key: LOOKBACK_DAYS
+        value: "7"
+      - key: REBALANCE_HOUR_UTC
+        value: "0"
+      - key: GROSS_LEVERAGE
+        value: "1.0"
+      - key: START_CASH
+        value: "1000"
