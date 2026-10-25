@@ -23,6 +23,8 @@ services:
         value: "7"
       - key: REBALANCE_HOUR_UTC
         value: "0"
+      - key: REBALANCE_DAYS
+        value: "7"
       - key: GROSS_LEVERAGE
         value: "1.0"
       - key: START_CASH

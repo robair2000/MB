@@ -1,8 +1,12 @@
 """Momentum paper bot for KuCoin Futures (public data only, no API keys, no real orders).
 
-Once a day it ranks the most traded USDT perpetuals by their last-7-day move (relative to their own
-volatility), goes long the strongest and short the weakest in equal amounts, and holds until the next
-rebalance. Every hour it marks the paper positions to market and charges/credits funding.
+Every REBALANCE_DAYS days (7 by default) it ranks the most traded USDT perpetuals by their
+last-7-day move (relative to their own volatility), goes long the strongest and short the weakest in
+equal amounts, and holds until the next rebalance. Every hour it marks the paper positions to market
+and charges/credits funding.
+
+The holding period matters more than anything else here: the 7-day score predicts 7-28 day returns
+but is anti-predictive at 1 day. See HORIZON.md.
 
     python bot.py            # runs forever
     python bot.py --once     # one cycle (rebalances now if none happened yet), then exits
@@ -31,7 +35,7 @@ EXCLUDE = {s.strip().upper() for s in os.getenv(
     "EXCLUDE", "TSLA,SOXL,SPCX,SNDK,MU,PAXG,XAUT,NVDA,AAPL,AMZN,GOOGL,META,MSFT,COIN,MSTR,HOOD,CRCL,QQQ,SPY").split(",")}
 LOOKBACK_DAYS = _f("LOOKBACK_DAYS", "7")
 REBALANCE_HOUR_UTC = int(os.getenv("REBALANCE_HOUR_UTC", "0"))  # must be a multiple of 4 (0,4,8,...)
-REBALANCE_DAYS = int(os.getenv("REBALANCE_DAYS", "1"))
+REBALANCE_DAYS = int(os.getenv("REBALANCE_DAYS", "7"))         # 1 was the old default; see HORIZON.md
 GROSS = _f("GROSS_LEVERAGE", "1.0")                           # sum of |positions| / equity
 FEE = _f("FEE", "0.0006")                                     # taker fee per side
 SLIPPAGE = _f("SLIPPAGE", "0.0005")                           # per side
